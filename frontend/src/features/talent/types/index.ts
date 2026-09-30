@@ -1,0 +1,1 @@
+export type { ResumeItem } from "@/types/api";

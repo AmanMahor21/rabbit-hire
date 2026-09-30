@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  api:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend:/app
+      - ./resumes:/app/resumes
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6333:6333"
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api

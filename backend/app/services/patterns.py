@@ -1,0 +1,35 @@
+# app/services/resume_parser/patterns.py
+
+SKILL_HEADING_PATTERN = (
+    r"(?:"
+    r"SKILLS?|"
+    r"TECHNICAL SKILLS?|"
+    r"CORE SKILLS?|"
+    r"KEY SKILLS?|"
+    r"CORE COMPETENC(?:Y|IES)|"
+    r"KEY COMPETENC(?:Y|IES)|"
+    r"TECH(?:NOLOGY|NOLOGIES)|"
+    r"TECH(?:NOLOGY|NICAL)? STACKS?|"
+    r"TECHNOLOG(?:Y|IES)\s*(?:&|AND)\s*TOOLS|"
+    r"TOOLS?\s*(?:&|AND)\s*TECHNOLOG(?:Y|IES)|"
+    r"SOFTWARE SKILLS?|"
+    r"IT SKILLS?|"
+    r"COMPUTER SKILLS?|"
+    r"PROGRAMMING SKILLS?|"
+    r"PROGRAMMING LANGUAGES?|"
+    r"TECHNICAL PROFICIENC(?:Y|IES)|"
+    r"TECHNICAL EXPERTISE|"
+    r"AREAS OF EXPERTISE|"
+    r"PROFESSIONAL SKILLS?|"
+    r"PROFESSIONAL COMPETENC(?:Y|IES)|"
+    r"SKILLS?\s*(?:&|AND)\s*(?:COMPETENC(?:Y|IES)|TECHNOLOG(?:Y|IES)|TOOLS?)|"
+    r"KNOWLEDGE\s*(?:&|AND)\s*SKILLS?|"
+    r"RELEVANT(?: TECHNICAL)? SKILLS?"
+    r")"
+)
+
+JUNK = {
+    "PROFESSIONAL", "SUMMARY", "CORE", "EXPERIENCE",
+    "EDUCATION", "PROJECTS", "SKILLS", "RESUME",
+    "TECHNICAL", "COMPETENCIES", "COMPETENCY",
+}

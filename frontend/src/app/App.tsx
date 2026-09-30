@@ -1,0 +1,1 @@
+import { AppProvider } from "./provider"; import { AppRoutes } from "./routes"; import "@/index.css"; export default function App() { return <AppProvider><div className="app-gradient min-h-dvh text-slate-100"><AppRoutes /></div></AppProvider>; }

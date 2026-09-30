@@ -1,0 +1,1 @@
+import { cn } from "@/lib/cn"; export function Avatar({ className, ...p }: React.HTMLAttributes<HTMLDivElement>) { return <div className={cn("h-9 w-9 rounded-full bg-white text-black flex items-center justify-center font-bold text-[12px]", className)} {...p} />; }

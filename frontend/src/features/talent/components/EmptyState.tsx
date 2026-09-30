@@ -1,0 +1,1 @@
+import { Empty } from "@/components/ui/empty"; export function TalentEmpty() { return <Empty title="No candidates found" desc="Try adjusting filters or search query" />; }

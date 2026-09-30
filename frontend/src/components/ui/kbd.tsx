@@ -1,0 +1,1 @@
+import { cn } from "@/lib/cn"; export function Kbd({ className, ...p }: React.HTMLAttributes<HTMLSpanElement>) { return <span className={cn("inline-flex h-5 min-w-5 items-center justify-center rounded border border-[var(--color-border)] bg-[var(--color-surface)] px-1 text-[11px] text-slate-400", className)} {...p} />; }
