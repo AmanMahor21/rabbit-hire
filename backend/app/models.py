@@ -57,7 +57,7 @@ class RankingRequest(BaseModel):
 
 class ChatRequest(BaseModel):
     message: str
-    history: List[Dict[str, str]] = []
+    history: List[Dict[str, Any]] = []
     filters: Optional[SearchFilters] = None
 
 

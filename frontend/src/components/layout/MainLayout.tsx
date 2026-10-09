@@ -5,8 +5,8 @@ import { useHireJobManager } from "@/features/hire/hooks/useHireJobManager";
 import { useState } from "react";
 
 export function MainLayout() {
-  const { data: job } = useHireJobManager();
-  const isRunning = job?.status === "queued" || job?.status === "running";
+  // const { data: job } = useHireJobManager();
+  // const isRunning = job?.status === "queued" || job?.status === "running";
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
@@ -19,7 +19,7 @@ export function MainLayout() {
             <Outlet />
           </div>
         </div>
-        {isRunning && (
+        {/* {isRunning && (
           <div className="fixed bottom-4 right-4 z-[var(--z-toast)] flex items-center gap-3 rounded-2xl border border-cyan-500/20 bg-[var(--color-surface)] px-4 py-3 shadow-2xl">
             <span className="h-5 w-5 animate-spin rounded-full border-2 border-cyan-400 border-t-transparent" />
             <div>
@@ -32,7 +32,7 @@ export function MainLayout() {
               View
             </Link>
           </div>
-        )}
+        )} */}
       </main>
     </div>
   );
