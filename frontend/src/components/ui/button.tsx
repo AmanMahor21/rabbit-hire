@@ -1,4 +1,3 @@
-
 import { cn } from "@/lib/cn";
 import React from "react";
 type Variant = "primary" | "secondary" | "ghost" | "outline" | "destructive";
