@@ -1,4 +1,3 @@
-
 import { toast, type ToastPosition } from "react-toastify";
 type ToastType = "success" | "error" | "warning" | "info";
 export function showToast({ message, type = "info", duration = 2500, position = "top-right" as ToastPosition }: { message: string; type?: ToastType; duration?: number; position?: ToastPosition; }) {

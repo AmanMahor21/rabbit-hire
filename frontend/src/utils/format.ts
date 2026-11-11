@@ -1,4 +1,3 @@
-
 export const formatExp = (y?: number | null) => {
   if (y == null) return "—";
   return y === 1 ? "1 yr" : `${y} yrs`;

@@ -54,7 +54,15 @@ export type HireJob = {
   progress: number;
   result?: {
     results: ResumeItem[];
-    outreach?: { candidate_id: string; email_body: string }[];
+    outreach?: {
+      candidate?: string;
+      candidate_id?: string;
+      email?: string;
+      message?: string;
+      email_body?: string;
+    }[];
+    rewritten_query?: string;
+    trace?: unknown[];
   };
   error?: string;
 };
