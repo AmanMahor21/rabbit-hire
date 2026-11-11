@@ -1,0 +1,43 @@
+groups:
+  - name: rabbithire-alerts
+    rules:
+      - alert: CeleryQueueBacklog
+        expr: celery_queue_length > 50
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Celery queue > 50 for 5m"
+          description: "Worker may be dead or slow. Check `celery -A app.core.celery_app.celery inspect active`."
+
+      - alert: LLMFallbackSpike
+        expr: sum(rate(llm_fallbacks_total[5m])) > 1
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "LLM fallback rate > 1/sec for 2m"
+          description: "OpenAI/provider likely down. Check provider status page."
+
+      - alert: SearchEmptyRegression
+        expr: |
+          (
+            sum(rate(search_empty_results_total{filters_present="true"}[10m]))
+            /
+            clamp_min(sum(rate(search_requests_total[10m])), 0.0001)
+          ) > 0.20
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: ">20% of filtered searches return empty"
+          description: "Likely filter regression or data quality issue."
+
+      - alert: BackendDown
+        expr: rabbithire_system_up == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Qdrant or Redis unreachable"
+          description: "Check /health on the API."
