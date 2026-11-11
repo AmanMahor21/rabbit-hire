@@ -1,0 +1,72 @@
+[
+  {
+    "id": "p_01",
+    "text": "Aarav Sharma\nFrontend Developer (React.js) | 3 Years Experience\naarav.sharma98@gmail.com | +91 98765 43210 | Bengaluru, India\nSUMMARY\nFrontend Developer with 3 years of experience building responsive web apps. Strong in React ecosystem, worked on e-commerce and dashboard products.\nSKILLS\nReact.js JavaScript TypeScript Redux HTML5 CSS3 Tailwind CSS REST APIs Git Jest Webpack NPM\nEXPERIENCE\nFrontend Developer - Infosys | Jun 2022 - Present\nEDUCATION\nB.Tech CSE - VIT Vellore (2018-2022) - 8.2 CGPA",
+    "expected": {
+      "skills": [
+        "REACT.JS",
+        "JAVASCRIPT",
+        "TYPESCRIPT",
+        "REDUX",
+        "HTML5",
+        "CSS3",
+        "TAILWIND CSS",
+        "REST APIS",
+        "GIT",
+        "JEST",
+        "WEBPACK",
+        "NPM"
+      ],
+      "experience_years": 3,
+      "location": ["Bengaluru"],
+      "domains": ["Frontend"],
+      "education": ["BACHELORS"]
+    }
+  },
+  {
+    "id": "p_02",
+    "text": "Priya Verma\nFrontend Developer (Angular) | 2 Years Experience\npriya.verma.ang@gmail.com | +91 91234 56789 | Hyderabad, India\nSUMMARY\nAngular Developer with 2 years experience in enterprise applications. Good knowledge of TypeScript, RxJS and Angular Material. Worked in Agile team.\nSKILLS\nAngular TypeScript JavaScript RxJS NgRx HTML5 CSS3 Bootstrap Angular Material REST API Git JIRA\nEXPERIENCE\nSoftware Engineer - Cognizant | Jul 2022 - Present\nEDUCATION\nB.E. IT - Pune University (2018-2022)",
+    "expected": {
+      "skills": [
+        "ANGULAR",
+        "TYPESCRIPT",
+        "JAVASCRIPT",
+        "RXJS",
+        "NGRX",
+        "HTML5",
+        "CSS3",
+        "BOOTSTRAP",
+        "ANGULAR MATERIAL",
+        "REST API",
+        "GIT",
+        "JIRA"
+      ],
+      "experience_years": 2,
+      "location": ["Hyderabad"],
+      "domains": ["Frontend"],
+      "education": ["BACHELORS"]
+    }
+  },
+  {
+    "id": "p_03",
+    "text": "Rohan Mehta\nFrontend Developer (React) Junior | 1 Year Experience\nrohan.mehta99@gmail.com | +91 99887 66554 | Mumbai, India\nSUMMARY\nJunior Frontend Developer - 1 year experience. Self-learned React, built 5+ small projects. Familiar with JavaScript, Bootstrap and Firebase.\nSKILLS\nReact.js JavaScript HTML5 CSS3 Bootstrap Git GitHub Firebase REST APIs Responsive Design\nEXPERIENCE\nFrontend Intern + Jr Developer - TechMitra | 2023 - Present\nEDUCATION\nBCA - Mumbai University (2020-2023)",
+    "expected": {
+      "skills": [
+        "REACT.JS",
+        "JAVASCRIPT",
+        "HTML5",
+        "CSS3",
+        "BOOTSTRAP",
+        "GIT",
+        "GITHUB",
+        "FIREBASE",
+        "REST APIS",
+        "RESPONSIVE DESIGN"
+      ],
+      "experience_years": 1,
+      "location": ["Mumbai"],
+      "domains": ["Frontend"],
+      "education": ["BACHELORS"]
+    }
+  }
+]

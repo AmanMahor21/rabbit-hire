@@ -1,0 +1,106 @@
+[
+  {
+    "id": "s_01",
+    "query": "Python developer with RAG and 3 years in Bangalore",
+    "filters": { "experience": 3 },
+    "expected_ids": [
+      "21_Shruti_Patel_Data_Engineer_AWS.pdf",
+      "11_Rahul_Nair_Python_Developer.pdf",
+      "36_Sunil_Rathore_Generative_AI_Engineer.pdf"
+    ],
+    "graded_relevance": {
+      "21_Shruti_Patel_Data_Engineer_AWS.pdf": 2,
+      "11_Rahul_Nair_Python_Developer.pdf": 1,
+      "36_Sunil_Rathore_Generative_AI_Engineer.pdf": 1
+    },
+    "tags": ["skills+location+exp"],
+    "source": "manual"
+  },
+  {
+    "id": "s_02",
+    "query": "React developer with Redux and ES6 experience",
+    "filters": {},
+    "expected_ids": [
+      "04_Ananya_Singh_Full_Stack_Developer_MERN.pdf",
+      "01_Aarav_Sharma_Frontend_Developer_Reactj.pdf",
+      "06_Sneha_Reddy_Full_Stack_Python_React.pdf"
+    ],
+    "graded_relevance": {
+      "04_Ananya_Singh_Full_Stack_Developer_MERN.pdf": 2,
+      "01_Aarav_Sharma_Frontend_Developer_Reactj.pdf": 2,
+      "06_Sneha_Reddy_Full_Stack_Python_React.pdf": 1
+    },
+    "tags": ["frontend", "react"],
+    "source": "manual"
+  },
+  {
+    "id": "s_03",
+    "query": "DevOps engineer in Delhi",
+    "filters": { "locations": ["Delhi"] },
+    "expected_ids": [
+      "24_Aman_Saxena_AWS_Cloud_Engineer.pdf",
+      "Resume_055_Varun_Mehta.pdf",
+      "Resume_049_Pranav_Singh.pdf",
+      "Resume_066_Siddharth_Patel.pdf"
+    ],
+    "graded_relevance": {
+      "24_Aman_Saxena_AWS_Cloud_Engineer.pdf": 2,
+      "Resume_055_Varun_Mehta.pdf": 1,
+      "Resume_049_Pranav_Singh.pdf": 1,
+      "Resume_066_Siddharth_Patel.pdf": 1
+    },
+    "tags": ["devops", "delhi"],
+    "source": "manual"
+  },
+  {
+    "id": "s_04",
+    "query": "Backend engineer with Java and Spring Boot in delhi and noida area",
+    "filters": {},
+    "expected_ids": [
+      "07_Karan_Singh_Backend_Developer_Java.pdf",
+      "Resume_001_Pranav_Joshi.pdf"
+    ],
+    "graded_relevance": {
+      "07_Karan_Singh_Backend_Developer_Java.pdf": 2,
+      "Resume_001_Pranav_Joshi.pdf": 2
+    },
+    "tags": ["backend", "java", "delhi-ncr"],
+    "source": "manual"
+  },
+  {
+    "id": "s_05",
+    "query": "AWS Terraform Kubernetes IAM specialist Delhi NCR",
+    "filters": {},
+    "expected_ids": [
+      "Resume_026_Neeraj_Tiwari.pdf",
+      "Resume_037_Pranav_Sharma.pdf",
+      "Resume_082_Aman_Tiwari.pdf",
+      "24_Aman_Saxena_AWS_Cloud_Engineer.pdf",
+      "Resume_076_Siddharth_Bansal.pdf"
+    ],
+    "graded_relevance": {
+      "Resume_026_Neeraj_Tiwari.pdf": 2,
+      "Resume_037_Pranav_Sharma.pdf": 2,
+      "Resume_082_Aman_Tiwari.pdf": 2,
+      "24_Aman_Saxena_AWS_Cloud_Engineer.pdf": 1,
+      "Resume_076_Siddharth_Bansal.pdf": 1
+    },
+    "tags": ["aws", "devops", "delhi-ncr"],
+    "source": "manual"
+  },
+  {
+    "id": "s_06",
+    "query": "Developer Next.js or React.js with AWS",
+    "filters": {},
+    "expected_ids": [
+      "04_Ananya_Singh_Full_Stack_Developer_MERN.pdf",
+      "01_Aarav_Sharma_Frontend_Developer_Reactj.pdf"
+    ],
+    "graded_relevance": {
+      "04_Ananya_Singh_Full_Stack_Developer_MERN.pdf": 2,
+      "01_Aarav_Sharma_Frontend_Developer_Reactj.pdf": 1
+    },
+    "tags": ["frontend", "aws", "react"],
+    "source": "manual"
+  }
+]

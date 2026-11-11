@@ -1,0 +1,29 @@
+[
+  {
+    "id": "c_01",
+    "history": [],
+    "message": "Find Python developers in Bangalore with 3 years exp",
+    "expected_tool": "search_talent_pool",
+    "expected_contains": ["Bangalore", "Python"],
+    "tags": ["search"]
+  },
+  {
+    "id": "c_02",
+    "history": [
+      { "role": "user", "content": "Find Python developers in Bangalore" },
+      { "role": "assistant", "content": "Found Aman with RAG experience" }
+    ],
+    "message": "What is his email?",
+    "expected_tool": "get_candidate_profile",
+    "expected_contains": ["aman", "email"],
+    "tags": ["detail", "coreference"]
+  },
+  {
+    "id": "c_03",
+    "history": [],
+    "message": "Hi hello",
+    "expected_tool": "none",
+    "expected_contains": ["help", "talent"],
+    "tags": ["pleasantries"]
+  }
+]

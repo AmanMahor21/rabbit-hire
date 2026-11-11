@@ -1,0 +1,46 @@
+[
+  {
+    "id": "r_03",
+    "job_description": "Senior Frontend Engineer - 3+ years React.js, nice to have Next.js and Redux Toolkit, experience with TypeScript, Tailwind CSS. Must have built scalable apps with state management. Location: Bengaluru.",
+    "candidate_filenames": [
+      "01_Aarav_Sharma_Frontend_Developer_Reactj.pdf",
+      "04_Ananya_Singh_Full_Stack_Developer_MERN.pdf",
+      "06_Sneha_Reddy_Full_Stack_Python_React.pdf",
+      "09_Aditya_Joshi_Backend_Developer_Nodejs.pdf",
+      "03_Rohan_Mehta_Frontend_Developer_React_.pdf"
+    ],
+    "ideal_rank": [
+      "01_Aarav_Sharma_Frontend_Developer_Reactj.pdf",
+      "04_Ananya_Singh_Full_Stack_Developer_MERN.pdf",
+      "06_Sneha_Reddy_Full_Stack_Python_React.pdf",
+      "03_Rohan_Mehta_Frontend_Developer_React_.pdf",
+      "09_Aditya_Joshi_Backend_Developer_Nodejs.pdf"
+    ],
+    "ideal_scores": [88, 82, 40, 15, 5],
+    "rubric": "Bengaluru + all core skills (React, TS, Redux, Tailwind) > same skills but wrong city > partial React only > no React at all",
+    "tags": ["frontend", "react", "senior"]
+  },
+  {
+    "id": "r_02",
+    "job_description": "Python Developer. Responsibilities: Develop Python applications, write clean and maintainable code, build REST APIs, integrate databases and third-party services, debug and optimize applications, prepare technical documentation. Desired: strong Python, SQL databases, REST APIs, Flask or Django is a plus, analytical thinking, passion for continuous learning.",
+    "candidate_filenames": [
+      "Resume_001_Pranav_Joshi.pdf",
+      "Resume_056_Manish_Malhotra.pdf",
+      "Resume_092_Nikhil_Agarwal.pdf",
+      "Resume_081_Siddharth_Desai.pdf",
+      "Resume_099_Rohan_Kumar.pdf",
+      "Resume_050_Vikram_Mehta.pdf"
+    ],
+    "ideal_rank": [
+      "Resume_001_Pranav_Joshi.pdf",
+      "Resume_056_Manish_Malhotra.pdf",
+      "Resume_092_Nikhil_Agarwal.pdf",
+      "Resume_081_Siddharth_Desai.pdf",
+      "Resume_099_Rohan_Kumar.pdf",
+      "Resume_050_Vikram_Mehta.pdf"
+    ],
+    "ideal_scores": [90, 88, 70, 65, 40, 35],
+    "rubric": "Python + SQL + REST APIs all present (Pranav, Manish) > missing one core skill (Nikhil, Siddharth) > heuristic-only fallback scores are not to be trusted",
+    "tags": ["python", "backend", "rest-api"]
+  }
+]
