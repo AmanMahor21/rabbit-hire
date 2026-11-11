@@ -7,10 +7,11 @@ import openai
 from langchain_openai import ChatOpenAI
 
 from app.core.config import settings
+from app.core.llm_stub import StubLLM
+from app.core.llm_metrics import MeasuredLLM
 
 
 def _build_kwargs(model: str, temperature: float, streaming: bool = False) -> dict[str, Any]:
-    print(settings, "mmmmmmmmmmmmmmmmm")
     kwargs: dict[str, Any] = {
         "api_key": settings.LLM_API_KEY,
         "model": model,
@@ -28,16 +29,24 @@ def is_llm_configured() -> bool:
     return bool(settings.LLM_API_KEY and settings.LLM_API_KEY.strip())
 
 
-def get_fast_llm(temperature: float = 0, streaming: bool = False) -> Optional[ChatOpenAI]:
+def get_fast_llm(temperature=0, streaming=False, stage: str = "generic"):
+    if settings.LLM_STUB:
+        return StubLLM("stub-fast", temperature)
     if not is_llm_configured():
         return None
-    return ChatOpenAI(**_build_kwargs(settings.LLM_FAST_MODEL, temperature, streaming))
+    raw = ChatOpenAI(
+        **_build_kwargs(settings.LLM_FAST_MODEL, temperature, streaming))
+    return MeasuredLLM(raw, stage=stage)
 
 
-def get_smart_llm(temperature: float = 0.1, streaming: bool = False) -> Optional[ChatOpenAI]:
+def get_smart_llm(temperature=0.1, streaming=False, stage: str = "generic"):
+    if settings.LLM_STUB:
+        return StubLLM("stub-smart", temperature)
     if not is_llm_configured():
         return None
-    return ChatOpenAI(**_build_kwargs(settings.LLM_SMART_MODEL, temperature, streaming))
+    raw = ChatOpenAI(
+        **_build_kwargs(settings.LLM_SMART_MODEL, temperature, streaming))
+    return MeasuredLLM(raw, stage=stage)
 
 
 def get_openai_client():

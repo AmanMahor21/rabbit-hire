@@ -1,9 +1,9 @@
+# backend/app/core/celery_app.py
 from celery import Celery
-import os
+from app.core.config import settings
 
-REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
+REDIS_URL = settings.REDIS_URL
 
-# ✅ Added include=['app.tasks.hire_tasks'] so Celery knows where the tasks are
 celery = Celery(
     "talent",
     broker=REDIS_URL,
