@@ -1,4 +1,3 @@
-
 import { Navigate, useRoutes } from "react-router";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { PATHS } from "./paths";
