@@ -4,6 +4,7 @@ import json
 import math
 from typing import Any
 from langchain_core.prompts import ChatPromptTemplate
+from app.core.metrics import LLM_FALLBACKS
 from app.core.llm import get_smart_llm
 
 MAX_LLM_RANK_CANDIDATES = 8
@@ -118,6 +119,7 @@ def rank_single(payload: dict[str, Any], job_description: str, llm) -> dict[str,
         }
     except Exception as exc:
         print(f"Candidate ranking LLM error: {exc}")
+        LLM_FALLBACKS.labels(stage="ranker", reason="error").inc()
         fallback = heuristic_score(payload, job_description)
         return {
             "score": fallback,
@@ -134,7 +136,7 @@ def ranker_agent_node(state: dict[str, Any]) -> dict[str, Any]:
     if not results:
         return {"ranked": []}
     candidates_for_llm = results[:MAX_LLM_RANK_CANDIDATES]
-    llm = get_smart_llm(temperature=0.1)
+    llm = get_smart_llm(temperature=0.1, stage="ranker")
     ranked: list[dict[str, Any]] = []
     for result in candidates_for_llm:
         payload = result.get("payload", {})
@@ -159,5 +161,5 @@ def ranker_agent_node(state: dict[str, Any]) -> dict[str, Any]:
         })
     ranked.sort(key=lambda item: float(
         item.get("rank_score", 0) or 0), reverse=True)
-    print(ranked, "qqqqqqqqqqqqqqqqqqqqqq")
+
     return {"ranked": ranked}

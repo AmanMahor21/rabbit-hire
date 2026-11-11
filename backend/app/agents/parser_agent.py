@@ -12,12 +12,13 @@ Rules: No predefined list. Extract everything like Helm, ArgoCD, Next.js, K8s, E
 
 def parse_resume_node(state: dict):
     text = state.get("resume_text", "")[:6000]
-    llm = get_fast_llm(temperature=0)
+    llm = get_fast_llm(temperature=0, stage="parser")
     if not llm:
         return {"parsed": {"skills": [], "experience_years": 0, "location": [], "domains": [], "summary": text[:300]}}
-    chain = parser_prompt | llm
     try:
-        res = chain.invoke({"resume_text": text})
+        # Build messages directly (MeasuredLLM is not a LangChain Runnable).
+        messages = parser_prompt.format_messages(resume_text=text)
+        res = llm.invoke(messages)
         content = getattr(res, "content", str(res))
         s = content.find("{")
         e = content.rfind("}")

@@ -11,7 +11,7 @@ def search_resumes_tool(query: str, top_k: int = 10) -> str:
     summary = []
     for r in results[:top_k]:
         p = r["payload"]
-        summary.append(f"{p['filename']} | Skills: {p['skills']} | Exp: {p['experience_years']} | Loc: {p['location']}")
+        summary.append(f"{p['filename']} | Skills: {p['skills']} | Exp: {p['experience']} | Loc: {p['location']}")
     return "\n".join(summary) or "No candidates found"
 
 @tool

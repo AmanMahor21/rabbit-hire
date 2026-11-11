@@ -12,16 +12,13 @@ def outreach_agent_node(state: dict[str, Any]) -> dict[str, Any]:
     ranked = state.get("ranked", [])
     auto_generate = state.get("auto_generate_outreach", False)
 
-    print(auto_generate, "outreach_agent_node")
-    print(ranked, "rankedddddddddddd node")
-
     if not auto_generate or not ranked:
         print("No outreach generation needed.")
         return {"outreach": []}
 
     job_description = state.get("job_description", "")
     candidates = ranked[:MAX_OUTREACH_CANDIDATES]
-    llm = get_fast_llm(temperature=0.4)
+    llm = get_fast_llm(temperature=0.4, stage="outreach")
 
     outreach: list[dict[str, Any]] = []
 

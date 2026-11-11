@@ -11,7 +11,7 @@ USE_LLM_QUERY_REWRITE = os.getenv(
 def rewrite_query_with_llm(query: str) -> str:
     try:
         from app.core.llm import get_fast_llm
-        llm = get_fast_llm(temperature=0)
+        llm = get_fast_llm(temperature=0, stage="search_rewrite")
         prompt = f"""
 Rewrite this hiring query for semantic resume search.
 Expand relevant technical synonyms.
