@@ -1,5 +1,5 @@
 // frontend/src/features/talent/components/FiltersPanel.tsx
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import Select from "react-select";
 import { useSearchStore } from "@/stores/useSearchStore";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -32,7 +32,7 @@ const EMPTY: FilterOptionsShape = {
 
 const POPULAR_COUNT = 12;
 
-// Shared dark theme styles for react-select
+// Shared dark theme styling for react-select components
 const selectStyles = {
   control: (base: any, state: any) => ({
     ...base,
@@ -92,7 +92,7 @@ export function FiltersPanel({ options, isLoading, experienceRange }: Props) {
   const maxExp = experienceRange?.max ?? 20;
   const minExp = experienceRange?.min ?? 0;
 
-  // react-select option shape — with count in the label
+  // React-select options with candidate counts in labels
   const skillOptions = useMemo(
     () =>
       safeOptions.skills.map((s) => ({
@@ -101,6 +101,7 @@ export function FiltersPanel({ options, isLoading, experienceRange }: Props) {
       })),
     [safeOptions.skills, safeOptions.skill_counts]
   );
+
   const locationOptions = useMemo(
     () =>
       safeOptions.locations.map((l) => ({
@@ -109,6 +110,7 @@ export function FiltersPanel({ options, isLoading, experienceRange }: Props) {
       })),
     [safeOptions.locations, safeOptions.location_counts]
   );
+
   const domainOptions = useMemo(
     () =>
       safeOptions.domains.map((d) => ({
@@ -139,12 +141,12 @@ export function FiltersPanel({ options, isLoading, experienceRange }: Props) {
     );
   }
 
-  // Popular skills — top N from the count-sorted list
+  // Quick-click popular skills sorted by frequency
   const popularSkills = safeOptions.skills.slice(0, POPULAR_COUNT);
 
   return (
     <div className="space-y-6">
-      {/* ─── POPULAR SKILLS (quick click chips) ─── */}
+      {/* ─── POPULAR SKILLS (Quick Click Chips) ─── */}
       {popularSkills.length > 0 && (
         <div>
           <h4 className="mb-2 text-[12px] font-medium text-white">Popular skills</h4>
@@ -185,7 +187,7 @@ export function FiltersPanel({ options, isLoading, experienceRange }: Props) {
           isSearchable
           options={skillOptions}
           value={selectedSkills}
-          onChange={(opts) => setFilters({ skills: (opts as any[]).map((o) => o.value) })}
+          onChange={(opts) => setFilters({ skills: opts ? (opts as any[]).map((o) => o.value) : [] })}
           placeholder="Search skills..."
           styles={selectStyles}
           menuPortalTarget={typeof document !== "undefined" ? document.body : undefined}
@@ -207,11 +209,14 @@ export function FiltersPanel({ options, isLoading, experienceRange }: Props) {
           isSearchable
           options={locationOptions}
           value={selectedLocations}
-          onChange={(opts) => setFilters({ locations: (opts as any[]).map((o) => o.value) })}
+          onChange={(opts) => setFilters({ locations: opts ? (opts as any[]).map((o) => o.value) : [] })}
           placeholder="Search locations..."
           styles={selectStyles}
           menuPortalTarget={typeof document !== "undefined" ? document.body : undefined}
           menuPosition="fixed"
+          noOptionsMessage={({ inputValue }) =>
+            inputValue ? `No locations match "${inputValue}"` : "No locations available"
+          }
         />
       </div>
 
@@ -225,15 +230,18 @@ export function FiltersPanel({ options, isLoading, experienceRange }: Props) {
           isSearchable
           options={domainOptions}
           value={selectedDomains}
-          onChange={(opts) => setFilters({ domains: (opts as any[]).map((o) => o.value) })}
+          onChange={(opts) => setFilters({ domains: opts ? (opts as any[]).map((o) => o.value) : [] })}
           placeholder="Search domains..."
           styles={selectStyles}
           menuPortalTarget={typeof document !== "undefined" ? document.body : undefined}
           menuPosition="fixed"
+          noOptionsMessage={({ inputValue }) =>
+            inputValue ? `No domains match "${inputValue}"` : "No domains available"
+          }
         />
       </div>
 
-      {/* ─── DEGREE (kept as chips — small list) ─── */}
+      {/* ─── DEGREE CHIPS ─── */}
       <div>
         <h4 className="mb-2 text-[12px] font-medium text-white">Degree</h4>
         <div className="flex flex-wrap gap-1.5">
@@ -257,7 +265,7 @@ export function FiltersPanel({ options, isLoading, experienceRange }: Props) {
         </div>
       </div>
 
-      {/* ─── MIN EXPERIENCE ─── */}
+      {/* ─── MIN EXPERIENCE SLIDER ─── */}
       <div>
         <h4 className="mb-2 text-[12px] font-medium text-white">Min Experience</h4>
         <input
@@ -266,7 +274,7 @@ export function FiltersPanel({ options, isLoading, experienceRange }: Props) {
           max={maxExp}
           value={filters.experience}
           onChange={(e) => setFilters({ experience: Number(e.target.value) })}
-          className="w-full"
+          className="w-full cursor-pointer accent-white"
         />
         <div className="flex justify-between text-[11px] text-slate-500">
           <span>{filters.experience} yrs</span>

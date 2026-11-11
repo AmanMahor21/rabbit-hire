@@ -1,4 +1,3 @@
-
 import type { ResumeItem } from "@/types/api";
 import { Badge, ScoreBadge } from "@/components/ui/badge";
 import { cn } from "@/lib/cn";
