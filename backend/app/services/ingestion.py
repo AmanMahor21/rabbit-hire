@@ -8,10 +8,12 @@ from typing import Any
 import pandas as pd
 from pypdf import PdfReader
 from app.core.config import settings
+from app.core.metrics import INGEST_FILES
 from app.services.skill_normalizer import normalize_skills
 from app.core.qdrant import get_qdrant_client
 from app.services.vectorstore import COLLECTION_NAME
 from app.services.patterns import JUNK, SKILL_HEADING_PATTERN
+from app.services.location_normalize import canonicalize_payload_locations
 
 try:
     import spacy
@@ -34,7 +36,6 @@ def get_existing_file_hashes() -> dict[str, str]:
     client = get_qdrant_client()
     existing = {}
     try:
-        # Fetch all records (limit 10000 is safe for most local/dev setups)
         records, _ = client.scroll(
             collection_name=COLLECTION_NAME,
             limit=10000,
@@ -46,7 +47,7 @@ def get_existing_file_hashes() -> dict[str, str]:
                 existing[r.payload["filename"]
                          ] = r.payload.get("file_hash", "")
     except Exception:
-        pass  # Collection might not exist yet
+        pass
     return existing
 
 
@@ -77,7 +78,7 @@ def extract_with_llm_open(text: str) -> dict | None:
     try:
         from app.core.llm import get_fast_llm
         from langchain_core.prompts import ChatPromptTemplate
-        llm = get_fast_llm(temperature=0)
+        llm = get_fast_llm(temperature=0, stage="ingest_parser")
         if not llm:
             return None
 
@@ -90,8 +91,9 @@ Rules:
 - Do not normalize, keep as written"""),
             ("human", "{resume_text}")
         ])
-        chain = prompt | llm
-        res = chain.invoke({"resume_text": text[:6000]})
+        # Build messages directly (MeasuredLLM is not a LangChain Runnable).
+        messages = prompt.format_messages(resume_text=text[:6000])
+        res = llm.invoke(messages)
         content = getattr(res, "content", str(res))
         start = content.find("{")
         end = content.rfind("}")
@@ -111,14 +113,12 @@ def extract_skills_open_fallback(text: str) -> list[str]:
         re.I | re.S
     )
     section = m.group(1) if m else text[:4000]
-    # includes \x7f , bullet, pipe, comma, newline
     parts = re.split(r"[\x7f\n,|•●\-·/;]+", section)
     out = []
     for p in parts:
         p = re.sub(r"^\W+", "", p.strip())
         if 2 <= len(p) <= 35 and p.upper() not in JUNK and len(p.split()) <= 4:
             out.append(p)
-    # dedup preserve order
     seen = set()
     uniq = []
     for s in out:
@@ -136,8 +136,6 @@ def extract_experience(text: str) -> int:
         r"(?:experience|exp)[:\s]+(\d+(?:\.\d+)?)\s*\+?\s*(?:years?|yrs?)",
         r"(\d+(?:\.\d+)?)\s*\+?\s*(?:years?|yrs?)",
     ]
-
-    # Loop through each pattern in your single-line list
     for pattern in patterns:
         matches = re.findall(pattern, text, re.IGNORECASE)
         for match in matches:
@@ -145,7 +143,6 @@ def extract_experience(text: str) -> int:
                 values.append(float(match))
             except ValueError:
                 pass
-
     return int(max(values)) if values else 0
 
 
@@ -197,20 +194,23 @@ def process_file(filename: str, file_hash: str) -> dict[str, Any] | None:
             education = []
 
         normalized = normalize_skills(raw_skills)
+        loc_pack = canonicalize_payload_locations(location)
 
         return {
             "filename": filename,
-            "file_hash": file_hash,  # <-- NEW: Store hash in payload
+            "file_hash": file_hash,
             "name": os.path.splitext(filename)[0],
             "email": extract_email(text),
             "phone": extract_phone(text),
             "skills_raw": raw_skills,
             "skills": normalized,
             "experience": experience,
-            "location": location,
+            "location": loc_pack["location"],
+            "location_canonical": loc_pack["location_canonical"],
             "domains": domains,
             "education": education,
             "text": text[:10000],
+            "summary": (llm_data or {}).get("summary", "") if llm_data else "",
         }
     except Exception as exc:
         print(f"Error processing {filename}: {exc}")
@@ -229,27 +229,27 @@ def ingest_all() -> pd.DataFrame:
     )
     print(f"Found {len(files)} resume files in directory.")
 
-    # 1. Fetch existing hashes from Qdrant (single fast network call)
     existing_hashes = get_existing_file_hashes()
     print(f"Found {len(existing_hashes)} existing records in Qdrant.")
 
     profiles = []
     skipped_count = 0
 
-    # 2. Check each file
     for filename in files:
         filepath = os.path.join(settings.RESUME_DIR, filename)
         current_hash = get_file_hash(filepath)
 
-        # 3. Skip if file exists and hash is identical
         if existing_hashes.get(filename) == current_hash:
+            INGEST_FILES.labels(status="skipped").inc()
             skipped_count += 1
             continue
 
-        # 4. Process new or modified files
         profile = process_file(filename, current_hash)
         if profile:
+            INGEST_FILES.labels(status="processed").inc()
             profiles.append(profile)
+        else:
+            INGEST_FILES.labels(status="failed").inc()
 
     print(f"✅ Skipped {skipped_count} unchanged files.")
     print(f"🚀 Processing {len(profiles)} new/modified files...")

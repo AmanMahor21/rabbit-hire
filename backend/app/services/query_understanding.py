@@ -5,6 +5,7 @@ from typing import List, Optional
 from pydantic import BaseModel, Field
 from langchain_core.prompts import ChatPromptTemplate
 from app.core.llm import get_fast_llm
+from rich import print
 
 
 class ChatIntent(str, Enum):
@@ -64,20 +65,24 @@ def understand_query(message: str, history: list[dict] | None = None) -> Extract
         )
 
     structured_llm = llm.with_structured_output(ExtractedQuery)
-    chain = prompt | structured_llm
 
     try:
         # Keep history short and useful
         history_text = ""
         for turn in history[-6:]:
+
             role = turn.get("role", "")
             content = turn.get("content") or turn.get("message") or ""
             history_text += f"{role}: {content}\n"
 
-        result = chain.invoke({
-            "message": message[:1500],
-            "history": history_text or "None"
-        })
+        # Build the message sequence directly. Composing `prompt | llm`
+        # fails because MeasuredLLM is not a LangChain Runnable.
+        messages = prompt.format_messages(
+            message=message[:1500],
+            history=history_text or "None",
+        )
+        result = structured_llm.invoke(messages)
+        print(f"[QUERY_UNDERSTANDING] {result}")
 
         result.original_query = message
         if not result.rewritten_query:
