@@ -12,6 +12,7 @@ import { Link } from "react-router";
 import { PATHS } from "@/app/routes/paths";
 import { apiClient } from "@/lib/api-client";
 import { FILTER_OPTIONS_QUERY_KEY } from "@/features/talent/hooks/useFilterOptions";
+import { usePendingUploads, PENDING_UPLOADS_QUERY_KEY } from "./hooks/usePendingUploads";
 
 type ProcessStatusResponse = {
   status: "processing" | "completed" | "failed";
@@ -30,6 +31,7 @@ export default function UploadPage() {
 
   const qc = useQueryClient();
   const [, setLastUpload] = useLocalStorage("lastUploadCount", 0);
+  const { data: pending } = usePendingUploads();
 
   useEffect(() => {
     return () => {
@@ -53,6 +55,8 @@ export default function UploadPage() {
           qc.invalidateQueries({ queryKey: FILTER_OPTIONS_QUERY_KEY });
           // ✅ Also invalidate stats so dashboard updates
           qc.invalidateQueries({ queryKey: ["stats"] });
+          // ✅ Refresh the pending-uploads count so the banner disappears
+          qc.invalidateQueries({ queryKey: PENDING_UPLOADS_QUERY_KEY });
 
           showToast({
             message: data.result?.message || "Indexing complete!",
@@ -146,6 +150,28 @@ export default function UploadPage() {
           </div>
         ))}
       </div>
+
+      {(pending?.pending ?? 0) > 0 && !isIndexing && step !== "indexed" && (
+        <div className="flex items-center justify-between gap-3 rounded-xl border border-violet-500/30 bg-violet-500/10 p-4">
+          <div className="flex items-start gap-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-violet-500 text-white">
+              <FiLoader className="h-4 w-4" />
+            </div>
+            <div>
+              <p className="text-[13px] font-medium text-white">
+                {pending?.pending} uploaded resume{pending?.pending === 1 ? "" : "s"} not indexed yet
+              </p>
+              <p className="mt-0.5 text-[12px] text-slate-400">
+                You uploaded these earlier but didn't finish indexing. Process them now to make them searchable.
+              </p>
+            </div>
+          </div>
+          <Button onClick={handleProcess} disabled={loading} className="h-10 shrink-0 px-4">
+            {loading ? <FiLoader className="mr-2 h-4 w-4 animate-spin" /> : <FiZap className="mr-2 h-4 w-4" />}
+            Process & index now
+          </Button>
+        </div>
+      )}
 
       <Card className="p-6">
         <Dropzone

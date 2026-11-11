@@ -1,4 +1,3 @@
-
 import { useCallback } from "react";
 export function Dropzone({ onFiles, disabled }: { onFiles: (f: File[]) => void; disabled?: boolean; }) {
   const onDrop = useCallback((e: React.DragEvent) => { e.preventDefault(); if (disabled) return; const files = Array.from(e.dataTransfer.files); onFiles(files); }, [onFiles, disabled]);
