@@ -33,12 +33,27 @@ services:
     # Worker code edits are picked up via the bind-mount; restart the
     # worker (make restart-worker) to load them. Celery here has no
     # --autoreload (needs watchdog), so we keep the stable base command.
-    command:
-      [
+    # Debug launch: celery worker under debugpy (listen on 5678).
+    # The `--` passes the Celery args to the worker; use -n to avoid
+    # clashing with the default worker hostname if the base worker is
+    # also running.
+    command: [
+        "python",
+        "-m",
+        "debugpy",
+        "--listen",
+        "0.0.0.0:5678",
+        # "--wait-for-client",
+        "-m",
         "celery",
         "-A",
         "app.core.celery_app.celery",
         "worker",
         "--loglevel=info",
-        "--concurrency=2",
+        "--concurrency=1",
+        "--pool=solo",
+        "-n",
+        "debug@%h",
       ]
+    ports:
+      - "5678:5678"

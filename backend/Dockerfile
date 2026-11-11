@@ -25,6 +25,10 @@ COPY requirements.txt .
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip install -r requirements.txt
 
+# Debug tooling for remote attach (dev only).
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install debugpy
+
 RUN --mount=type=cache,target=/root/.cache/pip \
     python -m spacy download en_core_web_sm
 
