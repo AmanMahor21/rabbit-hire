@@ -77,3 +77,9 @@ Thumbs.db
 .pytest_cache/
 .coverage
 htmlcov/
+
+# ─────────────────────────────────────────────
+# Generated eval reports — NEVER commit
+# ─────────────────────────────────────────────
+backend/app/eval/report_*.html
+backend/app/eval/report_*.json

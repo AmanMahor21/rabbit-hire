@@ -1,0 +1,44 @@
+# Dev overlay: bind-mount source + auto-reload so code changes
+# don't require rebuilding the image.
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+services:
+  api:
+    volumes:
+      - ./backend:/app
+      - resumes_data:/app/resumes
+    command:
+      [
+        "uvicorn",
+        "app.main:app",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8000",
+        "--workers",
+        "1",
+        "--reload",
+        "--reload-dir",
+        "/app",
+      ]
+    environment:
+      - RESUME_DIR=/app/resumes
+
+  worker:
+    volumes:
+      - ./backend:/app
+      - resumes_data:/app/resumes
+    environment:
+      - RESUME_DIR=/app/resumes
+    # Worker code edits are picked up via the bind-mount; restart the
+    # worker (make restart-worker) to load them. Celery here has no
+    # --autoreload (needs watchdog), so we keep the stable base command.
+    command:
+      [
+        "celery",
+        "-A",
+        "app.core.celery_app.celery",
+        "worker",
+        "--loglevel=info",
+        "--concurrency=2",
+      ]
