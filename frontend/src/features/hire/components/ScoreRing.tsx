@@ -1,4 +1,3 @@
-
 export function ScoreRing({ score }: { score?: number }) {
   const s = score ?? 0;
   const r = 36; const c = 2 * Math.PI * r; const offset = c - (s / 100) * c;

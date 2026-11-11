@@ -1,4 +1,3 @@
-
 import type { ResumeItem } from "@/types/api";
 import { CandidateCard } from "@/features/talent/components/CandidateCard";
 import { Card } from "@/components/ui/card";

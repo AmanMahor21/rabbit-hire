@@ -1,4 +1,3 @@
-
 import { apiClient } from "@/lib/api-client";
 import type { ResumeItem } from "@/types/api";
 export type ChatResponse = { answer: string; candidates?: ResumeItem[] };
