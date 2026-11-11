@@ -1,7 +1,8 @@
+# backend/app/core/redis_client.py
 import redis.asyncio as aioredis
-import os
+from app.core.config import settings
 
-REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
+REDIS_URL = settings.REDIS_URL
 _redis = None
 
 

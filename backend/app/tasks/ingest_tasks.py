@@ -4,10 +4,12 @@ from app.core.celery_app import celery
 from app.services.ingestion import ingest_all
 from app.services.vectorstore import upsert_profiles
 from app.api.routes_filters import invalidate_filter_cache
+from app.core.celery_metrics import measured_task
 
 
-@celery.task(name="process_resumes")
-def process_resumes_task():
+@celery.task(bind=True, name="process_resumes")
+@measured_task
+def process_resumes_task(self):
     df = ingest_all()
     if df.empty:
         return {"message": "No valid resumes found", "count": 0}

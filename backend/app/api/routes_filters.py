@@ -6,7 +6,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Dict, List
 
-from app.services.vectorstore import client, COLLECTION_NAME
+from app.services.vectorstore import get_client, COLLECTION_NAME
 from app.core.redis_client import get_redis
 import json
 
@@ -34,7 +34,7 @@ EXPERIENCE_MAX = 30
 
 def _derive_filters_from_qdrant() -> FilterOptions:
     try:
-        records, _ = client.scroll(
+        records, _ = get_client().scroll(
             collection_name=COLLECTION_NAME,
             limit=10000,
             with_payload=["skills", "location", "domains", "experience"],

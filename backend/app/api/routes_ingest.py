@@ -5,8 +5,8 @@ from ..tasks.ingest_tasks import process_resumes_task
 import os
 from pathlib import Path
 from fastapi import APIRouter, UploadFile, File, HTTPException
-from ..services.ingestion import ingest_all
-from ..services.vectorstore import upsert_profiles, client, COLLECTION_NAME
+from ..services.ingestion import ingest_all, get_existing_file_hashes, get_file_hash
+from ..services.vectorstore import upsert_profiles, get_client, COLLECTION_NAME
 from ..core.config import settings
 
 router = APIRouter()
@@ -99,14 +99,46 @@ async def get_process_status(task_id: str):
     return {"status": "processing", "state": result.state}
 
 
+@router.get("/process/pending")
+async def get_pending_process():
+    """Count resumes that have been uploaded but not yet indexed.
+
+    We reuse the same hash comparison the ingest task uses: a file is
+    "pending" if it exists on disk and its current hash differs from the
+    hash stored in Qdrant (or it has no entry at all).
+    """
+    if not os.path.isdir(settings.RESUME_DIR):
+        return {"pending": 0, "total": 0}
+
+    resume_dir = Path(settings.RESUME_DIR).resolve()
+    files = [
+        f for f in os.listdir(resume_dir)
+        if os.path.isfile(resume_dir / f)
+        and Path(f).suffix.lower() in ALLOWED_EXTENSIONS
+    ]
+
+    existing_hashes = get_existing_file_hashes()
+    pending = 0
+    for filename in files:
+        filepath = resume_dir / filename
+        try:
+            current_hash = get_file_hash(str(filepath))
+        except Exception:
+            continue
+        if existing_hashes.get(filename) != current_hash:
+            pending += 1
+
+    return {"pending": pending, "total": len(files)}
+
+
 @router.get("/stats")
 async def stats():
     files = [f for f in os.listdir(settings.RESUME_DIR) if os.path.isfile(
         os.path.join(settings.RESUME_DIR, f))]
     try:
-        col_info = client.get_collection(COLLECTION_NAME)
+        col_info = get_client().get_collection(COLLECTION_NAME)
         parsed = col_info.points_count
-        records, _ = client.scroll(
+        records, _ = get_client().scroll(
             collection_name=COLLECTION_NAME, limit=1000, with_payload=True, with_vectors=False)
         all_sk = set(s for r in records for s in (
             r.payload.get("skills", []) or []))

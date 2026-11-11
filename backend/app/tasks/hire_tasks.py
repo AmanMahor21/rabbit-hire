@@ -4,9 +4,11 @@ from app.graph.supervisor_graph import talent_graph
 from app.db import SessionLocal
 from app.models import HireJob
 import traceback
+from app.core.celery_metrics import measured_task
 
 
 @celery.task(bind=True, name="run_hire_graph")
+@measured_task
 def run_hire_graph(self, job_id: str):
     db = SessionLocal()
     try:

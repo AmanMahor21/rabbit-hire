@@ -27,16 +27,53 @@ class HireJob(Base):
                         onupdate=datetime.datetime.utcnow)
 
 
+class EvalFeedback(Base):
+    __tablename__ = "eval_feedback"
+    id = Column(String, primary_key=True,
+                default=lambda: uuid.uuid4().hex[:12])
+    type = Column(String)
+    query = Column(String, nullable=True)
+    job_id = Column(String, nullable=True)
+    candidate_filename = Column(String, nullable=True)
+    human_rating = Column(Integer)
+    human_corrected_rank = Column(JSON, nullable=True)
+    error_tags = Column(JSON, nullable=True)
+    notes = Column(String, nullable=True)
+    meta = Column(JSON, nullable=True)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+
+
+class SearchLog(Base):
+    __tablename__ = "search_logs"
+    id = Column(String, primary_key=True,
+                default=lambda: uuid.uuid4().hex[:12])
+    query = Column(String)
+    filters = Column(JSON)
+    results = Column(JSON)
+    clicked_filename = Column(String, nullable=True)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+
+
+class EvalRun(Base):
+    __tablename__ = "eval_runs"
+    id = Column(String, primary_key=True,
+                default=lambda: uuid.uuid4().hex[:12])
+    trigger = Column(String)
+    metrics = Column(JSON)
+    passed = Column(String)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+
+
 class ExperienceRange(BaseModel):
     min_years: int = 0
     max_years: int = 50
 
 
 class SearchFilters(BaseModel):
-    skills: List[str] = []
-    locations: List[str] = []
-    domains: List[str] = []
-    degrees: List[str] = []
+    skills: List[str] = Field(default_factory=list)
+    locations: List[str] = Field(default_factory=list)
+    domains: List[str] = Field(default_factory=list)
+    degrees: List[str] = Field(default_factory=list)
     experience: int = 0
     strict_skill_search: bool = False  # deprecated, keep False for recall
     has_clearance: bool = False
@@ -57,7 +94,7 @@ class RankingRequest(BaseModel):
 
 class ChatRequest(BaseModel):
     message: str
-    history: List[Dict[str, Any]] = []
+    history: List[Dict[str, Any]] = Field(default_factory=list)
     filters: Optional[SearchFilters] = None
 
 
