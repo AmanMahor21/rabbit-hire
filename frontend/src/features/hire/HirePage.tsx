@@ -29,7 +29,7 @@ const mapApiToResumeItem = (apiResult: any): ResumeItem => {
     text: payload.text || "",
     summary: payload.summary || "",
     // Convert 0-1 score to 0-100 if needed
-    rank_score: apiResult.rank_score || (apiResult.score ? Math.round(apiResult.score * 100) : 0),
+    rank_score: apiResult.rank_score ?? (apiResult.score ? Math.round(apiResult.score * 100) : 0),
     ranking_reason: apiResult.ranking_reason || apiResult.reason || "",
   };
 };

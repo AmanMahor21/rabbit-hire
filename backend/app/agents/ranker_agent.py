@@ -108,6 +108,8 @@ def rank_single(payload: dict[str, Any], job_description: str, llm) -> dict[str,
         response = llm.invoke(messages)
         content = getattr(response, "content", str(response))
         data = safe_json_loads(content)
+        if not isinstance(data, dict) or data.get("score") is None:
+            raise ValueError("LLM response missing 'score'")
         score = float(data.get("score", 0))
         score = max(0.0, min(score, 100.0))
         return {
