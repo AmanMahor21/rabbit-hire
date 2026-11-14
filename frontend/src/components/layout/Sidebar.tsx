@@ -3,7 +3,7 @@
 import { NavLink, useLocation } from "react-router";
 import { SIDEBAR_NAV } from "@/config/constants";
 import { cn } from "@/lib/cn";
-import { FiGrid, FiSearch, FiCpu, FiUploadCloud, FiMessageSquare, FiZap } from "react-icons/fi";
+import { FiGrid, FiSearch, FiCpu, FiUploadCloud, FiMessageSquare } from "react-icons/fi";
 import { useState } from "react";
 
 const iconMap = {
@@ -125,18 +125,6 @@ export function Sidebar({ open, setOpen }: { open?: boolean; setOpen?: (v: boole
               </div>
             ))}
           </div>
-
-          {/* ... existing footer/promo code ... */}
-          {!collapsed && (
-            <div className="mt-8 rounded-xl border border-[var(--color-border)] bg-gradient-to-b from-[var(--color-surface-raised)] to-[var(--color-surface)] p-3">
-              <div className="flex items-center gap-2">
-                <FiZap className="h-4 w-4 text-cyan-400" />
-                <p className="text-[12px] font-medium text-white">Vector DB</p>
-                <span className="ml-auto h-2 w-2 rounded-full bg-emerald-400" />
-              </div>
-              <p className="mt-2 text-[11px] leading-4 text-slate-400">Qdrant • LangGraph • RAG indexed and ready.</p>
-            </div>
-          )}
         </div>
 
         {/* ... existing user profile code ... */}
