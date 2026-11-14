@@ -8,6 +8,8 @@ from fastapi import APIRouter, UploadFile, File, HTTPException
 from ..services.ingestion import ingest_all, get_existing_file_hashes, get_file_hash
 from ..services.vectorstore import upsert_profiles, get_client, COLLECTION_NAME
 from ..core.config import settings
+import pandas as pd
+from .routes_search import _EXPERIENCE_BUCKETS, _bucket_experience
 
 router = APIRouter()
 ALLOWED_EXTENSIONS = {".pdf", ".docx", ".txt", ".md"}
@@ -135,6 +137,7 @@ async def get_pending_process():
 async def stats():
     files = [f for f in os.listdir(settings.RESUME_DIR) if os.path.isfile(
         os.path.join(settings.RESUME_DIR, f))]
+    records = []
     try:
         col_info = get_client().get_collection(COLLECTION_NAME)
         parsed = col_info.points_count
@@ -146,4 +149,24 @@ async def stats():
     except Exception:
         parsed = 0
         unique = 0
-    return {"total_resumes": len(files), "parsed_resumes": parsed, "unique_skills": unique}
+    charts = {}
+    if records:
+        skills_series = pd.Series(
+            s for r in records for s in (r.payload.get("skills", []) or []))
+        top_skills = skills_series.value_counts().head(10)
+        bucket_counts = {b: 0 for b in _EXPERIENCE_BUCKETS}
+        for r in records:
+            bucket_counts[_bucket_experience(
+                int(r.payload.get("experience", 0) or 0))] += 1
+        charts = {
+            "top_skills": {
+                "labels": top_skills.index.tolist(),
+                "data": top_skills.values.tolist(),
+            },
+            "experience_dist": {
+                "labels": _EXPERIENCE_BUCKETS,
+                "data": [bucket_counts[b] for b in _EXPERIENCE_BUCKETS],
+            },
+        }
+    return {"total_resumes": len(files), "parsed_resumes": parsed,
+            "unique_skills": unique, "charts": charts}

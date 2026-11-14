@@ -45,6 +45,10 @@ export type DashboardStats = {
   parsed_resumes: number;
   unique_skills: number;
   total_candidates?: number;
+  charts?: {
+    top_skills?: { labels: string[]; data: number[] };
+    experience_dist?: { labels: string[]; data: number[] };
+  };
 };
 
 export type HireJob = {
