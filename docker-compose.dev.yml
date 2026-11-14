@@ -7,8 +7,18 @@ services:
     volumes:
       - ./backend:/app
       - resumes_data:/app/resumes
-    command:
-      [
+    # Run uvicorn UNDER debugpy so VS Code can attach on port 5679.
+    # --wait-for-client is intentionally commented out: if enabled, the
+    # api refuses traffic until VS Code attaches. Uncomment if you want
+    # breakpoints set before the first request (e.g. debugging startup).
+    command: [
+        "python",
+        "-m",
+        "debugpy",
+        "--listen",
+        "0.0.0.0:5679",
+        # "--wait-for-client",
+        "-m",
         "uvicorn",
         "app.main:app",
         "--host",
@@ -21,6 +31,8 @@ services:
         "--reload-dir",
         "/app",
       ]
+    ports:
+      - "5679:5679"
     environment:
       - RESUME_DIR=/app/resumes
 
