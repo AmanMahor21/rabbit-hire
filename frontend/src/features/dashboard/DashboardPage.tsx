@@ -3,9 +3,8 @@ import { Link } from "react-router";
 import { StatCard } from "./components/StatCard";
 import { dashboardApi } from "./api/dashboardApi";
 import { PATHS } from "@/app/routes/paths";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FiSearch, FiUploadCloud, FiCpu, FiMessageSquare, FiActivity } from "react-icons/fi";
+import { FiSearch, FiUploadCloud } from "react-icons/fi";
 import { Skeleton } from "@/components/ui/skeleton";
 import Charts from "./components/Charts";
 export default function DashboardPage() {
@@ -52,44 +51,6 @@ export default function DashboardPage() {
           </>
         )}
       </div>
-      <Card className="p-6">
-        <div className="flex items-center justify-between">
-          <h3 className="text-[14px] font-semibold text-white">Quick actions</h3>
-          <FiActivity className="h-4 w-4 text-slate-500" />
-        </div>
-        <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
-          <Link
-            to={PATHS.talent}
-            className="group rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4 hover:border-white/10 transition-colors"
-          >
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white text-black">
-              <FiSearch className="h-4 w-4" />
-            </div>
-            <p className="mt-3 text-[13px] font-medium text-white">Search talent</p>
-            <p className="mt-1 text-[11px] text-slate-500">Semantic search with filters</p>
-          </Link>
-          <Link
-            to={PATHS.hire}
-            className="group rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4 hover:border-white/10 transition-colors"
-          >
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-500 text-white">
-              <FiCpu className="h-4 w-4" />
-            </div>
-            <p className="mt-3 text-[13px] font-medium text-white">Agentic hire</p>
-            <p className="mt-1 text-[11px] text-slate-500">JD → ranking → outreach</p>
-          </Link>
-          <Link
-            to={PATHS.chat}
-            className="group rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4 hover:border-white/10 transition-colors"
-          >
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500 text-black">
-              <FiMessageSquare className="h-4 w-4" />
-            </div>
-            <p className="mt-3 text-[13px] font-medium text-white">Ask talent pool</p>
-            <p className="mt-1 text-[11px] text-slate-500">RAG chat over resumes</p>
-          </Link>
-        </div>
-      </Card>
       {data?.charts && (data.charts.top_skills || data.charts.experience_dist) ? <Charts charts={data.charts} /> : null}
     </div>
   );
